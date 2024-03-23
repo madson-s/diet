@@ -110,6 +110,7 @@ model LateralCircumference {
 }
 
 enum CircumferenceSide {
+  BOTH
   LEFT
   RIGHT
 }
