@@ -1,0 +1,180 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String       @id @default(dbgenerated("UUID"))
+  email      String       @unique
+  password   String
+  name       String
+  type       UserType
+  Patient    Patient[]
+  Validation Validation[]
+  Answer     Answer[]
+}
+
+enum UserType {
+  ADMIN
+  NUTRITIONIST
+}
+
+model Patient {
+  id             String           @id @default(dbgenerated("UUID"))
+  name           String
+  gender         PatientGender
+  income         Float?
+  scholarity     String?
+  contact        String?
+  nutritionistId String
+  anthropometric Anthropometric[]
+  anamnesis      Anamnesis[]
+  nutritionist   User             @relation(fields: [nutritionistId], references: [id])
+}
+
+enum PatientGender {
+  MALE
+  FEMALE
+}
+
+model Anamnesis {
+  id        String  @id @default(dbgenerated("UUID"))
+  content   String
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id])
+}
+
+model FoodConsumption {
+  id String @id @default(dbgenerated("UUID"))
+}
+
+model Anthropometric {
+  id String @id @default(dbgenerated("UUID"))
+
+  formula       AnthropometricFormula
+  wight         Float
+  hight         Float
+  patientId     String
+  bioimpedance  Bioimpedance[]
+  skinFold      SkinFold[]
+  circumference Circumference[]
+  patient       Patient               @relation(fields: [patientId], references: [id])
+}
+
+enum AnthropometricFormula {
+  DEFAULT
+}
+
+model SkinFold {
+  id               String         @id @default(dbgenerated("UUID"))
+  triceps          Int?
+  biceps           Int?
+  subscapularis    Int?
+  suprailiac       Int?
+  middleAxillary   Int?
+  thoracic         Int?
+  supraspinatus    Int?
+  abdominal        Int?
+  thigh            Int?
+  calf             Int?
+  anthropometricId String
+  anthropometric   Anthropometric @relation(fields: [anthropometricId], references: [id])
+}
+
+model Circumference {
+  id               String                 @id @default(dbgenerated("UUID"))
+  neck             Int?
+  chest            Int?
+  waist            Int?
+  hip              Int?
+  abdomen          Int?
+  anthropometricId String
+  laterals         LateralCircumference[]
+  anthropometric   Anthropometric         @relation(fields: [anthropometricId], references: [id])
+}
+
+model LateralCircumference {
+  id               String            @id @default(dbgenerated("UUID"))
+  side             CircumferenceSide
+  relaxedArm       Int?
+  contractedArm    Int?
+  forearm          Int?
+  calf             Int?
+  thigh            Int?
+  circumferencesId String?
+  Circumferences   Circumference?    @relation(fields: [circumferencesId], references: [id])
+}
+
+enum CircumferenceSide {
+  LEFT
+  RIGHT
+}
+
+model Bioimpedance {
+  id                 String         @id @default(dbgenerated("UUID"))
+  fatMassPercentage  Float
+  fatMass            Float
+  leanMassPercentage Float
+  leanMass           Float
+  fatFreeMass        Float
+  boneWeight         Int
+  bodyWater          Int
+  metabolicAge       Int
+  anthropometricId   String
+  anthropometric     Anthropometric @relation(fields: [anthropometricId], references: [id])
+}
+
+model Validation {
+  id     String         @id @default(dbgenerated("UUID"))
+  userId String
+  type   ValidationType
+  quiz   Quiz[]
+  user   User           @relation(fields: [userId], references: [id])
+
+  @@unique([userId, type])
+}
+
+enum ValidationType {
+  CONTENT
+  UI
+  UX
+}
+
+model Quiz {
+  id           String     @id @default(dbgenerated("UUID"))
+  title        String
+  active       Boolean
+  validationId String
+  questions    Question[]
+  Answers      Answer[]
+  validation   Validation @relation(fields: [validationId], references: [id])
+}
+
+model Question {
+  id         String             @id @default(dbgenerated("UUID"))
+  statement  String
+  answerType QuestionAnswerType
+  options    Json?
+  quizId     String
+  quiz       Quiz               @relation(fields: [quizId], references: [id])
+}
+
+enum QuestionAnswerType {
+  TEXT
+  RADIO
+  CHECKBOX
+  RATING
+}
+
+model Answer {
+  id      String @id @default(dbgenerated("UUID"))
+  payload Json?
+  quizId  String
+  userId  String
+  quiz    Quiz   @relation(fields: [quizId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
+}

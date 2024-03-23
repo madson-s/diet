@@ -1,0 +1,31 @@
+{
+  "Patient": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "gender": {
+        "type": "string"
+      },
+      "income": {
+        "type": "number",
+        "nullable": true
+      },
+      "scholarity": {
+        "type": "string",
+        "nullable": true
+      },
+      "contact": {
+        "type": "string",
+        "nullable": true
+      },
+      "nutritionistId": {
+        "type": "string"
+      }
+    }
+  }
+}

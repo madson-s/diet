@@ -1,0 +1,63 @@
+{
+  "/patients": {
+    "get": {
+      "summary": "List all patients",
+      "responses": {
+        "200": {
+          "description": "A list of patients.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Patient"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Create a new patient",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Patient"
+            }
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "Patient created."
+        }
+      }
+    }
+  },
+  "/patients/{id}": {
+    "get": {
+      "summary": "Get a patient by ID",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Detailed patient information."
+        },
+        "404": {
+          "description": "Patient not found."
+        }
+      }
+    }
+  }
+}
