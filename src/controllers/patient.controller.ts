@@ -20,7 +20,7 @@ export class PatientController {
 
   async getPatientById(req: Request, res: Response) {
     try {
-      const patient = await this.patientRepository.getById(req.params.id);
+      const patient = await this.patientRepository.getById(+req.params.id);
       if (!patient) {
         return res.status(404).send('Patient not found');
       }
@@ -43,7 +43,7 @@ export class PatientController {
 
   async updatePatient(req: Request, res: Response) {
     try {
-      const updatedPatient = await this.patientRepository.update(req.params.id, req.body);
+      const updatedPatient = await this.patientRepository.update(+req.params.id, req.body);
       res.json(updatedPatient);
     } catch (error) {
       console.error(error);
@@ -53,7 +53,7 @@ export class PatientController {
 
   async deletePatient(req: Request, res: Response) {
     try {
-      await this.patientRepository.delete(req.params.id);
+      await this.patientRepository.delete(+req.params.id);
       res.status(204).send();
     } catch (error) {
       console.error(error);

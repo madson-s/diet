@@ -12,20 +12,20 @@ export class PatientRepository {
     return await prisma.patient.findMany();
   }
 
-  async getById(id: string): Promise<Patient | null> {
+  async getById(id: number): Promise<Patient | null> {
     return await prisma.patient.findUnique({
       where: { id },
     });
   }
 
-  async update(id: string, data: Prisma.PatientUpdateInput): Promise<Patient> {
+  async update(id: number, data: Prisma.PatientUpdateInput): Promise<Patient> {
     return await prisma.patient.update({
       where: { id },
       data,
     });
   }
 
-  async delete(id: string): Promise<Patient> {
+  async delete(id: number): Promise<Patient> {
     return await prisma.patient.delete({
       where: { id },
     });

@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id         String       @id @default(dbgenerated("UUID"))
+  id         Int          @id @default(autoincrement())
   email      String       @unique
   password   String
   name       String
@@ -24,13 +24,13 @@ enum UserType {
 }
 
 model Patient {
-  id              String            @id @default(dbgenerated("UUID"))
+  id              Int               @id @default(autoincrement())
   name            String
   gender          PatientGender
   income          Float?
   scholarity      String?
   contact         String?
-  nutritionistId  String
+  nutritionistId  Int
   anthropometric  Anthropometric[]
   anamnesis       Anamnesis[]
   FoodConsumption FoodConsumption[]
@@ -40,49 +40,50 @@ model Patient {
 enum PatientGender {
   MALE
   FEMALE
+  OTHER
 }
 
 model Anamnesis {
-  id        String  @id @default(dbgenerated("UUID"))
+  id        Int     @id @default(autoincrement())
+  patientId Int
   content   String
-  patientId String
   patient   Patient @relation(fields: [patientId], references: [id])
 }
 
 model FoodConsumption {
-  id        String  @id @default(dbgenerated("UUID"))
+  id        Int     @id @default(autoincrement())
+  patientId Int
   meals     Meal[]
-  patientId String
   patient   Patient @relation(fields: [patientId], references: [id])
 }
 
 model Meal {
-  id            String          @id @default(dbgenerated("UUID"))
+  id            Int             @id @default(autoincrement())
+  consumptionId Int
   portions      Portion[]
-  consumptionId String
   consumption   FoodConsumption @relation(fields: [consumptionId], references: [id])
 }
 
 model Portion {
-  id        String  @id @default(dbgenerated("UUID"))
+  id        Int     @id @default(autoincrement())
   quantity  String
-  mensureId String
+  mealId    Int
+  foodId    Int
+  mensureId Int
   measure   Measure @relation(fields: [mensureId], references: [id])
-  foodId    String
   food      Food    @relation(fields: [foodId], references: [id])
   Meal      Meal    @relation(fields: [mealId], references: [id])
-  mealId    String
 }
 
 model Measure {
-  id       String    @id @default(dbgenerated("UUID"))
+  id       Int       @id @default(autoincrement())
   name     String
   portion  Float
   portions Portion[]
 }
 
 model Food {
-  id           String    @id @default(dbgenerated("UUID"))
+  id           Int       @id @default(autoincrement())
   name         String
   protein      Float
   lipid        Float
@@ -93,12 +94,12 @@ model Food {
 }
 
 model Anthropometric {
-  id String @id @default(dbgenerated("UUID"))
+  id Int @id @default(autoincrement())
 
   formula       AnthropometricFormula
   wight         Float
   hight         Float
-  patientId     String
+  patientId     Int
   bioimpedance  Bioimpedance[]
   skinFold      SkinFold[]
   circumference Circumference[]
@@ -110,7 +111,7 @@ enum AnthropometricFormula {
 }
 
 model SkinFold {
-  id               String         @id @default(dbgenerated("UUID"))
+  id               Int            @id @default(autoincrement())
   triceps          Int?
   biceps           Int?
   subscapularis    Int?
@@ -121,31 +122,31 @@ model SkinFold {
   abdominal        Int?
   thigh            Int?
   calf             Int?
-  anthropometricId String
+  anthropometricId Int
   anthropometric   Anthropometric @relation(fields: [anthropometricId], references: [id])
 }
 
 model Circumference {
-  id               String                 @id @default(dbgenerated("UUID"))
+  id               Int                    @id @default(autoincrement())
   neck             Int?
   chest            Int?
   waist            Int?
   hip              Int?
   abdomen          Int?
-  anthropometricId String
+  anthropometricId Int
   laterals         LateralCircumference[]
   anthropometric   Anthropometric         @relation(fields: [anthropometricId], references: [id])
 }
 
 model LateralCircumference {
-  id               String            @id @default(dbgenerated("UUID"))
+  id               Int               @id @default(autoincrement())
   side             CircumferenceSide
   relaxedArm       Int?
   contractedArm    Int?
   forearm          Int?
   calf             Int?
   thigh            Int?
-  circumferencesId String?
+  circumferencesId Int?
   Circumferences   Circumference?    @relation(fields: [circumferencesId], references: [id])
 }
 
@@ -156,7 +157,7 @@ enum CircumferenceSide {
 }
 
 model Bioimpedance {
-  id                 String         @id @default(dbgenerated("UUID"))
+  id                 Int            @id @default(autoincrement())
   fatMassPercentage  Float
   fatMass            Float
   leanMassPercentage Float
@@ -165,13 +166,13 @@ model Bioimpedance {
   boneWeight         Int
   bodyWater          Int
   metabolicAge       Int
-  anthropometricId   String
+  anthropometricId   Int
   anthropometric     Anthropometric @relation(fields: [anthropometricId], references: [id])
 }
 
 model Validation {
-  id     String         @id @default(dbgenerated("UUID"))
-  userId String
+  id     Int            @id @default(autoincrement())
+  userId Int
   type   ValidationType
   quiz   Quiz[]
   user   User           @relation(fields: [userId], references: [id])
@@ -186,21 +187,21 @@ enum ValidationType {
 }
 
 model Quiz {
-  id           String     @id @default(dbgenerated("UUID"))
+  id           Int        @id @default(autoincrement())
   title        String
   active       Boolean
-  validationId String
+  validationId Int
   questions    Question[]
   Answers      Answer[]
   validation   Validation @relation(fields: [validationId], references: [id])
 }
 
 model Question {
-  id         String             @id @default(dbgenerated("UUID"))
+  id         Int                @id @default(autoincrement())
   statement  String
   answerType QuestionAnswerType
   options    Json?
-  quizId     String
+  quizId     Int
   quiz       Quiz               @relation(fields: [quizId], references: [id])
 }
 
@@ -212,10 +213,10 @@ enum QuestionAnswerType {
 }
 
 model Answer {
-  id      String @id @default(dbgenerated("UUID"))
+  id      Int   @id @default(autoincrement())
   payload Json?
-  quizId  String
-  userId  String
-  quiz    Quiz   @relation(fields: [quizId], references: [id])
-  user    User   @relation(fields: [userId], references: [id])
+  quizId  Int
+  userId  Int
+  quiz    Quiz  @relation(fields: [quizId], references: [id])
+  user    User  @relation(fields: [userId], references: [id])
 }

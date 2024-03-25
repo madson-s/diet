@@ -4,9 +4,9 @@ import { makePatientController } from '../factories/controllers/patient_controll
 const patientController = makePatientController(); 
 
 export default (router: Router) => {
-  router.get('/patients', patientController.getAllPatients);
-  router.get('/patients/:id', patientController.getPatientById);
-  router.post('/patients', patientController.createPatient);
-  router.put('/patients/:id', patientController.updatePatient);
-  router.delete('/patients/:id', patientController.deletePatient);
+  router.get('/patients', (req, res) => patientController.getAllPatients(req, res));
+  router.get('/patients/:id', (req, res) => patientController.getPatientById(req, res));
+  router.post('/patients', (req, res) => patientController.createPatient(req, res));
+  router.put('/patients/:id', (req, res) => patientController.updatePatient(req, res));
+  router.delete('/patients/:id', (req, res) => patientController.deletePatient(req, res));
 };
