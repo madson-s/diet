@@ -24,16 +24,17 @@ enum UserType {
 }
 
 model Patient {
-  id             String           @id @default(dbgenerated("UUID"))
-  name           String
-  gender         PatientGender
-  income         Float?
-  scholarity     String?
-  contact        String?
-  nutritionistId String
-  anthropometric Anthropometric[]
-  anamnesis      Anamnesis[]
-  nutritionist   User             @relation(fields: [nutritionistId], references: [id])
+  id              String            @id @default(dbgenerated("UUID"))
+  name            String
+  gender          PatientGender
+  income          Float?
+  scholarity      String?
+  contact         String?
+  nutritionistId  String
+  anthropometric  Anthropometric[]
+  anamnesis       Anamnesis[]
+  FoodConsumption FoodConsumption[]
+  nutritionist    User              @relation(fields: [nutritionistId], references: [id])
 }
 
 enum PatientGender {
@@ -49,7 +50,46 @@ model Anamnesis {
 }
 
 model FoodConsumption {
-  id String @id @default(dbgenerated("UUID"))
+  id        String  @id @default(dbgenerated("UUID"))
+  meals     Meal[]
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id])
+}
+
+model Meal {
+  id            String          @id @default(dbgenerated("UUID"))
+  portions      Portion[]
+  consumptionId String
+  consumption   FoodConsumption @relation(fields: [consumptionId], references: [id])
+}
+
+model Portion {
+  id        String  @id @default(dbgenerated("UUID"))
+  quantity  String
+  mensureId String
+  measure   Measure @relation(fields: [mensureId], references: [id])
+  foodId    String
+  food      Food    @relation(fields: [foodId], references: [id])
+  Meal      Meal    @relation(fields: [mealId], references: [id])
+  mealId    String
+}
+
+model Measure {
+  id       String    @id @default(dbgenerated("UUID"))
+  name     String
+  portion  Float
+  portions Portion[]
+}
+
+model Food {
+  id           String    @id @default(dbgenerated("UUID"))
+  name         String
+  protein      Float
+  lipid        Float
+  carbohydrate Float
+  calories     Float
+  portion      Float
+  portions     Portion[]
 }
 
 model Anthropometric {
