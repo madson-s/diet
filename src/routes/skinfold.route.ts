@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { makeSkinFoldController } from '../factories/controllers/skinfold_controller.factory'; // Certifique-se de usar o caminho correto
+import { makeSkinFoldController } from '../factories/controllers/skinfold_controller.factory'; 
 
 const skinFoldController = makeSkinFoldController();
 

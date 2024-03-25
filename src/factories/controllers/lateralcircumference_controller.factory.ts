@@ -1,5 +1,4 @@
-
-import { LateralCircumferenceController } from "../../controllers/LateralCircumference.controller";
+import { LateralCircumferenceController } from "../../controllers/lateralcircumference.controller";
 import { LateralCircumferenceRepository } from "../../repositories/lateralcircumference.repository";
 
 export function makeLateralCircumferenceController(): LateralCircumferenceController {
