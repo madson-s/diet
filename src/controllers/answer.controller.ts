@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AnswerRepository } from '../repositories/answer.repository'; // Certifique-se de usar o caminho correto
+import { AnswerRepository } from '../repositories/answer.repository'; 
 
 export class AnswerController {
   private readonly answerRepository: AnswerRepository;

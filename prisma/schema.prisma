@@ -33,7 +33,7 @@ model Patient {
   nutritionistId  Int
   anthropometric  Anthropometric[]
   anamnesis       Anamnesis[]
-  FoodConsumption FoodConsumption[]
+  FoodConsumption Reminder[]
   nutritionist    User              @relation(fields: [nutritionistId], references: [id])
 }
 
@@ -50,7 +50,7 @@ model Anamnesis {
   patient   Patient @relation(fields: [patientId], references: [id])
 }
 
-model FoodConsumption {
+model Reminder {
   id        Int     @id @default(autoincrement())
   patientId Int
   meals     Meal[]
@@ -61,7 +61,7 @@ model Meal {
   id            Int             @id @default(autoincrement())
   consumptionId Int
   portions      Portion[]
-  consumption   FoodConsumption @relation(fields: [consumptionId], references: [id])
+  consumption   Reminder @relation(fields: [consumptionId], references: [id])
 }
 
 model Portion {

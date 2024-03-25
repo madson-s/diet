@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { makeAnswerController } from '../factories/controllers/answer_controller.factory'; // Certifique-se de usar o caminho correto
+import { makeAnswerController } from '../factories/controllers/answer_controller.factory'; 
 
 const answerController = makeAnswerController();
 
