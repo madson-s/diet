@@ -16,6 +16,11 @@ model User {
   Patient    Patient[]
   Validation Validation[]
   Answer     Answer[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  deletedAt  DateTime?
+
+  @@map("user")
 }
 
 enum UserType {
@@ -24,17 +29,20 @@ enum UserType {
 }
 
 model Patient {
-  id              Int               @id @default(autoincrement())
-  name            String
-  gender          PatientGender
-  income          Float?
-  scholarity      String?
-  contact         String?
-  nutritionistId  Int
-  anthropometric  Anthropometric[]
-  anamnesis       Anamnesis[]
-  FoodConsumption Reminder[]
-  nutritionist    User              @relation(fields: [nutritionistId], references: [id])
+  id             Int           @id @default(autoincrement())
+  name           String
+  gender         PatientGender
+  income         Float?
+  scholarity     String?
+  contact        String?
+  nutritionistId Int
+  appointments   Appointment[]
+  nutritionist   User          @relation(fields: [nutritionistId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+
+  @@map("patient")
 }
 
 enum PatientGender {
@@ -43,67 +51,127 @@ enum PatientGender {
   OTHER
 }
 
+model Appointment {
+  id             Int             @id @default(autoincrement())
+  patientId      Int
+  anamnesis      Anamnesis?
+  reminder       Reminder?
+  anthropometric Anthropometric?
+  patient        Patient         @relation(fields: [patientId], references: [id])
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  deletedAt      DateTime?
+
+  @@map("appointment")
+}
+
 model Anamnesis {
-  id        Int     @id @default(autoincrement())
-  patientId Int
-  content   String
-  patient   Patient @relation(fields: [patientId], references: [id])
+  id            Int         @id @default(autoincrement())
+  patientId     Int
+  content       String
+  appointmentId Int         @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  deletedAt     DateTime?
+
+  @@map("anamnesis")
 }
 
 model Reminder {
-  id        Int     @id @default(autoincrement())
-  patientId Int
-  meals     Meal[]
-  patient   Patient @relation(fields: [patientId], references: [id])
+  id            Int         @id @default(autoincrement())
+  appointmentId Int         @unique
+  meals         Meal[]
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  deletedAt     DateTime?
+
+  @@map("reminder")
 }
 
 model Meal {
-  id            Int             @id @default(autoincrement())
-  consumptionId Int
-  portions      Portion[]
-  consumption   Reminder @relation(fields: [consumptionId], references: [id])
+  id         Int       @id @default(autoincrement())
+  name       String
+  reminderId Int
+  time       String
+  portions   Portion[]
+  reminder   Reminder  @relation(fields: [reminderId], references: [id])
+
+  @@map("meal")
 }
 
 model Portion {
-  id        Int     @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   quantity  String
   mealId    Int
   foodId    Int
   mensureId Int
-  measure   Measure @relation(fields: [mensureId], references: [id])
-  food      Food    @relation(fields: [foodId], references: [id])
-  Meal      Meal    @relation(fields: [mealId], references: [id])
+  measure   Measure   @relation(fields: [mensureId], references: [id])
+  food      Food      @relation(fields: [foodId], references: [id])
+  meal      Meal      @relation(fields: [mealId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("portion")
 }
 
 model Measure {
-  id       Int       @id @default(autoincrement())
-  name     String
-  portion  Float
-  portions Portion[]
+  id        Int       @id @default(autoincrement())
+  name      String
+  portion   Float
+  unit      String
+  portions  Portion[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("measure")
 }
 
 model Food {
-  id           Int       @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   name         String
-  protein      Float
-  lipid        Float
-  carbohydrate Float
-  calories     Float
-  portion      Float
+  protein      Float?
+  lipid        Float?
+  carbohydrate Float?
+  calories     Float?
+  portion      Float?
+  unit         String?
+  degree       FoodDegree
   portions     Portion[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  deletedAt    DateTime?
+
+  @@map("food")
+}
+
+enum FoodDegree {
+  IN_NATURE
+  MIN_PROCESSED
+  PROCESSED
+  ULTRA_PROCESSED
+  INGREDIENT
 }
 
 model Anthropometric {
-  id Int @id @default(autoincrement())
-
+  id            Int                   @id @default(autoincrement())
   formula       AnthropometricFormula
-  wight         Float
-  hight         Float
-  patientId     Int
-  bioimpedance  Bioimpedance[]
-  skinFold      SkinFold[]
-  circumference Circumference[]
-  patient       Patient               @relation(fields: [patientId], references: [id])
+  width         Float?
+  height        Float?
+  patientId     Int?
+  bioimpedance  Bioimpedance?
+  skinFold      SkinFold?
+  circumference Circumference?
+  appointmentId Int                   @unique
+  appointment   Appointment           @relation(fields: [appointmentId], references: [id])
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  deletedAt     DateTime?
+
+  @@map("anthropometric")
 }
 
 enum AnthropometricFormula {
@@ -122,8 +190,13 @@ model SkinFold {
   abdominal        Int?
   thigh            Int?
   calf             Int?
-  anthropometricId Int
+  anthropometricId Int            @unique
   anthropometric   Anthropometric @relation(fields: [anthropometricId], references: [id])
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  deletedAt        DateTime?
+
+  @@map("skin_fold")
 }
 
 model Circumference {
@@ -133,9 +206,14 @@ model Circumference {
   waist            Int?
   hip              Int?
   abdomen          Int?
-  anthropometricId Int
+  anthropometricId Int                    @unique
   laterals         LateralCircumference[]
   anthropometric   Anthropometric         @relation(fields: [anthropometricId], references: [id])
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  deletedAt        DateTime?
+
+  @@map("circumference")
 }
 
 model LateralCircumference {
@@ -148,6 +226,11 @@ model LateralCircumference {
   thigh            Int?
   circumferencesId Int?
   Circumferences   Circumference?    @relation(fields: [circumferencesId], references: [id])
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  deletedAt        DateTime?
+
+  @@map("lateral_circunference")
 }
 
 enum CircumferenceSide {
@@ -158,16 +241,21 @@ enum CircumferenceSide {
 
 model Bioimpedance {
   id                 Int            @id @default(autoincrement())
-  fatMassPercentage  Float
-  fatMass            Float
-  leanMassPercentage Float
-  leanMass           Float
-  fatFreeMass        Float
-  boneWeight         Int
-  bodyWater          Int
-  metabolicAge       Int
-  anthropometricId   Int
+  fatMassPercentage  Float?
+  fatMass            Float?
+  leanMassPercentage Float?
+  leanMass           Float?
+  fatFreeMass        Float?
+  boneWeight         Int?
+  bodyWater          Int?
+  metabolicAge       Int?
+  anthropometricId   Int            @unique
   anthropometric     Anthropometric @relation(fields: [anthropometricId], references: [id])
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  deletedAt          DateTime?
+
+  @@map("bioimpedance")
 }
 
 model Validation {
@@ -178,6 +266,7 @@ model Validation {
   user   User           @relation(fields: [userId], references: [id])
 
   @@unique([userId, type])
+  @@map("validation")
 }
 
 enum ValidationType {
@@ -194,6 +283,11 @@ model Quiz {
   questions    Question[]
   Answers      Answer[]
   validation   Validation @relation(fields: [validationId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  deletedAt    DateTime?
+
+  @@map("quiz")
 }
 
 model Question {
@@ -203,6 +297,11 @@ model Question {
   options    Json?
   quizId     Int
   quiz       Quiz               @relation(fields: [quizId], references: [id])
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+  deletedAt  DateTime?
+
+  @@map("question")
 }
 
 enum QuestionAnswerType {
@@ -213,10 +312,15 @@ enum QuestionAnswerType {
 }
 
 model Answer {
-  id      Int   @id @default(autoincrement())
-  payload Json?
-  quizId  Int
-  userId  Int
-  quiz    Quiz  @relation(fields: [quizId], references: [id])
-  user    User  @relation(fields: [userId], references: [id])
+  id        Int       @id @default(autoincrement())
+  payload   Json?
+  quizId    Int
+  userId    Int
+  quiz      Quiz      @relation(fields: [quizId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("answer")
 }
