@@ -46,7 +46,9 @@
     "required": [
       "id",
       "date",
-      "patientId"
+      "patientId",
+      "createdAt",
+      "updatedAt"
     ]
   }
 }

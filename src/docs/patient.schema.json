@@ -3,16 +3,18 @@
     "type": "object",
     "properties": {
       "id": {
-        "type": "string"
+        "type": "integer",
+        "format": "int64"
       },
       "name": {
         "type": "string"
       },
       "gender": {
-        "type": "string"
+        "$ref": "#/components/schemas/PatientGender"
       },
       "income": {
         "type": "number",
+        "format": "float",
         "nullable": true
       },
       "scholarity": {
@@ -24,8 +26,47 @@
         "nullable": true
       },
       "nutritionistId": {
-        "type": "string"
+        "type": "integer",
+        "format": "int64"
+      },
+      "appointments": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Appointment"
+        }
+      },
+      "nutritionist": {
+        "$ref": "#/components/schemas/User"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "updatedAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "deletedAt": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
       }
-    }
+    },
+    "required": [
+      "id",
+      "name",
+      "gender",
+      "nutritionistId",
+      "createdAt",
+      "updatedAt"
+    ]
+  },
+  "PatientGender": {
+    "type": "string",
+    "enum": [
+      "MALE",
+      "FEMALE",
+      "OTHER"
+    ]
   }
 }

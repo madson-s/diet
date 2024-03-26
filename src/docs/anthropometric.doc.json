@@ -1,0 +1,141 @@
+{
+    "/anthropometrics": {
+      "get": {
+        "tags": [
+          "Anthropometric"
+        ],
+        "summary": "List all anthropometrics",
+        "responses": {
+          "200": {
+            "description": "A list of anthropometrics.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Anthropometric"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Anthropometric"
+        ],
+        "summary": "Create a new anthropometric",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Anthropometric"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Anthropometric created."
+          }
+        }
+      }
+    },
+    "/anthropometrics/{id}": {
+      "get": {
+        "tags": [
+          "Anthropometric"
+        ],
+        "summary": "Get an anthropometric by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detailed anthropometric information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Anthropometric"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Anthropometric not found."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Anthropometric"
+        ],
+        "summary": "Update an anthropometric by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Anthropometric"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Anthropometric updated."
+          },
+          "404": {
+            "description": "Anthropometric not found."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Anthropometric"
+        ],
+        "summary": "Delete an anthropometric by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Anthropometric deleted successfully."
+          },
+          "404": {
+            "description": "Anthropometric not found."
+          }
+        }
+      }
+    }
+  }
+  

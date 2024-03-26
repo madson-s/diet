@@ -1,0 +1,76 @@
+{
+    "Food": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "protein": {
+          "type": "number",
+          "format": "float",
+          "nullable": true
+        },
+        "lipid": {
+          "type": "number",
+          "format": "float",
+          "nullable": true
+        },
+        "carbohydrate": {
+          "type": "number",
+          "format": "float",
+          "nullable": true
+        },
+        "calories": {
+          "type": "number",
+          "format": "float",
+          "nullable": true
+        },
+        "portion": {
+          "type": "number",
+          "format": "float",
+          "nullable": true
+        },
+        "unit": {
+          "type": "string",
+          "nullable": true
+        },
+        "degree": {
+          "$ref": "#/components/schemas/FoodDegree"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "FoodDegree": {
+      "type": "string",
+      "enum": [
+        "IN_NATURE",
+        "MIN_PROCESSED",
+        "PROCESSED",
+        "ULTRA_PROCESSED",
+        "INGREDIENT"
+      ]
+    }
+  }
+  

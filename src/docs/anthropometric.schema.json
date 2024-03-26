@@ -1,0 +1,71 @@
+{
+    "Anthropometric": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "formula": {
+          "$ref": "#/components/schemas/AnthropometricFormula"
+        },
+        "weight": {
+          "type": "number",
+          "format": "float",
+          "nullable": true
+        },
+        "height": {
+          "type": "number",
+          "format": "float",
+          "nullable": true
+        },
+        "bioimpedance": {
+          "$ref": "#/components/schemas/Bioimpedance",
+          "nullable": true
+        },
+        "skinFold": {
+          "$ref": "#/components/schemas/SkinFold",
+          "nullable": true
+        },
+        "circumference": {
+          "$ref": "#/components/schemas/Circumference",
+          "nullable": true
+        },
+        "appointmentId": {
+          "type": "integer",
+          "format": "int64",
+          "unique": true
+        },
+        "appointment": {
+          "$ref": "#/components/schemas/Appointment"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        }
+      },
+      "required": [
+        "id",
+        "formula",
+        "appointmentId",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AnthropometricFormula": {
+      "type": "string",
+      "enum": [
+        "DEFAULT"
+      ]
+    }
+  }
+  

@@ -1,0 +1,141 @@
+{
+    "/portions": {
+      "get": {
+        "tags": [
+          "Portion"
+        ],
+        "summary": "List all portions",
+        "responses": {
+          "200": {
+            "description": "A list of portions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Portion"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Portion"
+        ],
+        "summary": "Create a new portion",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Portion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Portion created."
+          }
+        }
+      }
+    },
+    "/portions/{id}": {
+      "get": {
+        "tags": [
+          "Portion"
+        ],
+        "summary": "Get a portion by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detailed portion information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Portion"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Portion not found."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Portion"
+        ],
+        "summary": "Update a portion by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Portion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Portion updated."
+          },
+          "404": {
+            "description": "Portion not found."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Portion"
+        ],
+        "summary": "Delete a portion by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Portion deleted successfully."
+          },
+          "404": {
+            "description": "Portion not found."
+          }
+        }
+      }
+    }
+  }
+  
