@@ -8,17 +8,16 @@ datasource db {
 }
 
 model User {
-  id         Int          @id @default(autoincrement())
-  email      String       @unique
-  password   String
-  name       String
-  type       UserType
-  Patient    Patient[]
-  Validation Validation[]
-  Answer     Answer[]
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  deletedAt  DateTime?
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  name      String
+  type      UserType
+  patients  Patient[]
+  answer    Answer[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   @@map("user")
 }
@@ -53,6 +52,7 @@ enum PatientGender {
 
 model Appointment {
   id             Int             @id @default(autoincrement())
+  date           DateTime
   patientId      Int
   anamnesis      Anamnesis?
   reminder       Reminder?
@@ -158,7 +158,7 @@ enum FoodDegree {
 model Anthropometric {
   id            Int                   @id @default(autoincrement())
   formula       AnthropometricFormula
-  width         Float?
+  weight        Float?
   height        Float?
   bioimpedance  Bioimpedance?
   skinFold      SkinFold?
@@ -257,13 +257,10 @@ model Bioimpedance {
 }
 
 model Validation {
-  id     Int            @id @default(autoincrement())
-  userId Int
-  type   ValidationType
-  quiz   Quiz[]
-  user   User           @relation(fields: [userId], references: [id])
+  id   Int            @id @default(autoincrement())
+  type ValidationType
+  quiz Quiz[]
 
-  @@unique([userId, type])
   @@map("validation")
 }
 
