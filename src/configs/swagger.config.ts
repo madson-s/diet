@@ -4,7 +4,7 @@ import { promises as fs } from 'fs';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 10000;
 
 async function loadSwaggerPathsAndSchemas() {
   const docsDirectory = path.join(__dirname, '..', '..', '..', 'docs');
