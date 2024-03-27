@@ -5,7 +5,7 @@ import cors from 'cors';
 import { setupRouter } from './configs/router.config';
 import { setupSwagger } from './configs/swagger.config';
 
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 async function init(): Promise<void> {
   const app = express();
