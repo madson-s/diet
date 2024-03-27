@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const router_config_1 = require("./configs/router.config");
-const swagger_config_1 = require("./configs/swagger.config");
+const router_config_1 = require("./src/configs/router.config");
+const swagger_config_1 = require("./src/configs/swagger.config");
 const port = process.env.PORT || 8080;
 function init() {
     return __awaiter(this, void 0, void 0, function* () {
