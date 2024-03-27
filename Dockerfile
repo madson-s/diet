@@ -10,4 +10,6 @@ COPY --chown=node:node package*.json /home/node/api/
 
 RUN npm install --legacy-peer-deps
 
+RUN npm run build
+
 CMD ["npm","start"]
