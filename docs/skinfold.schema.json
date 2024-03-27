@@ -1,0 +1,79 @@
+{
+    "SkinFold": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "triceps": {
+          "type": "integer",
+          "nullable": true
+        },
+        "biceps": {
+          "type": "integer",
+          "nullable": true
+        },
+        "subscapularis": {
+          "type": "integer",
+          "nullable": true
+        },
+        "suprailiac": {
+          "type": "integer",
+          "nullable": true
+        },
+        "middleAxillary": {
+          "type": "integer",
+          "nullable": true
+        },
+        "thoracic": {
+          "type": "integer",
+          "nullable": true
+        },
+        "supraspinatus": {
+          "type": "integer",
+          "nullable": true
+        },
+        "abdominal": {
+          "type": "integer",
+          "nullable": true
+        },
+        "thigh": {
+          "type": "integer",
+          "nullable": true
+        },
+        "calf": {
+          "type": "integer",
+          "nullable": true
+        },
+        "anthropometricId": {
+          "type": "integer",
+          "format": "int64",
+          "unique": true
+        },
+        "anthropometric": {
+          "$ref": "#/components/schemas/Anthropometric"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        }
+      },
+      "required": [
+        "id",
+        "anthropometricId",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  }
+  

@@ -7,7 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 const port = process.env.PORT || 8080;
 
 async function loadSwaggerPathsAndSchemas() {
-  const docsDirectory = path.join(__dirname, '../docs');
+  const docsDirectory = path.join(__dirname, '..', '..', '..', 'docs');
   const files = await fs.readdir(docsDirectory);
   
   const swaggerPaths = {};

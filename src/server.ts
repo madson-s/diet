@@ -8,7 +8,7 @@ import { setupSwagger } from './configs/swagger.config';
 const port = process.env.PORT || 8080;
 
 async function init(): Promise<void> {
-  const app = express();
+  const app = express()
 
   app.use(express.json());
 

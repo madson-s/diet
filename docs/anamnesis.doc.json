@@ -1,0 +1,141 @@
+{
+    "/anamneses": {
+      "get": {
+        "tags": [
+          "Anamnesis"
+        ],
+        "summary": "List all anamneses",
+        "responses": {
+          "200": {
+            "description": "A list of anamneses.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Anamnesis"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Anamnesis"
+        ],
+        "summary": "Create a new anamnesis",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Anamnesis"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Anamnesis created."
+          }
+        }
+      }
+    },
+    "/anamneses/{id}": {
+      "get": {
+        "tags": [
+          "Anamnesis"
+        ],
+        "summary": "Get an anamnesis by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detailed anamnesis information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Anamnesis"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Anamnesis not found."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Anamnesis"
+        ],
+        "summary": "Update an anamnesis by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Anamnesis"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Anamnesis updated."
+          },
+          "404": {
+            "description": "Anamnesis not found."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Anamnesis"
+        ],
+        "summary": "Delete an anamnesis by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Anamnesis deleted successfully."
+          },
+          "404": {
+            "description": "Anamnesis not found."
+          }
+        }
+      }
+    }
+  }
+  
