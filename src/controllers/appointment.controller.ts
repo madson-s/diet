@@ -1,5 +1,52 @@
 import { Request, Response } from 'express';
-import { AppointmentRepository } from '../repositories/appointment.repository'; 
+import { AppointmentRepository } from '../repositories/appointment.repository';
+
+function PrismaParser(appointment: any): any {
+  const {
+    anamnesis,
+    reminder: { meals },
+    anthropometric: { bioimpedance, skinFold, circumference, ...anthropometricRest },
+    anthropometric,
+    ...appointmentRest
+  } = appointment;
+  return {
+    ...appointmentRest,
+    anamnesis: {
+      create: anamnesis,
+    },
+    reminder: {
+      create: {
+        meals: {
+          create: meals.map((meal: any) => ({
+            ...meal,
+            portions: {
+              create: meal.portions,
+            },
+          })),
+        },
+      },
+    },
+    anthropometric: {
+      create: {
+        ...anthropometricRest,
+        bioimpedance: {
+          create: bioimpedance,
+        },
+        skinFold: {
+          create: skinFold,
+        },
+        circumference: {
+          create: {
+            ...circumference,
+            laterals: {
+              create: circumference.laterals,
+            },
+          },
+        },
+      },
+    },
+  }
+}
 
 export class AppointmentController {
   private readonly appointmentRepository: AppointmentRepository;
@@ -38,6 +85,25 @@ export class AppointmentController {
     } catch (error) {
       console.error(error);
       res.status(400).send('Error creating appointment');
+    }
+  }
+
+  async syncAppointment(req: Request, res: Response) {
+    try {
+      const { lastSync } = req.query;
+      if (!lastSync) return res.status(400).send('lastSync query is required');
+      const lastSyncDate = new Date(+lastSync);
+      const arrayData = [];
+      for (const data of req.body) {
+        const appointment = PrismaParser(data);
+        arrayData.push(appointment)
+      }
+      const updatedAppointments = await this.appointmentRepository.getAllSync(lastSyncDate);
+      const createdAppointments = await this.appointmentRepository.createMany(req.body);
+      res.status(201).json({ updatedAppointments, createdAppointments });
+    } catch (error) {
+      console.error(error);
+      res.status(400).send('Error creating patient');
     }
   }
 

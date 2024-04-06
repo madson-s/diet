@@ -2,8 +2,8 @@ import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 
-import { setupRouter } from './src/configs/router.config';
-import { setupSwagger } from './src/configs/swagger.config';
+import { setupRouter } from './configs/router.config';
+import { setupSwagger } from './configs/swagger.config';
 
 const port = process.env.PORT || 10000;
 

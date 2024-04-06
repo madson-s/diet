@@ -27,7 +27,7 @@ class BioimpedanceRepository {
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.bioimpedance.findUnique({
-                where: { id },
+                where: { id }
             });
         });
     }
@@ -35,14 +35,14 @@ class BioimpedanceRepository {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.bioimpedance.update({
                 where: { id },
-                data,
+                data
             });
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.bioimpedance.delete({
-                where: { id },
+                where: { id }
             });
         });
     }

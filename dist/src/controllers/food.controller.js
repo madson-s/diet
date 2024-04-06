@@ -17,6 +17,12 @@ class FoodController {
     getAllFoods(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const { lastSync } = req.query;
+                if (lastSync) {
+                    const lastSyncDate = new Date(+lastSync);
+                    const foods = yield this.foodRepository.getAllSync(lastSyncDate);
+                    return res.json(foods);
+                }
                 const foods = yield this.foodRepository.getAll();
                 res.json(foods);
             }

@@ -10,6 +10,12 @@ export class FoodController {
 
   async getAllFoods(req: Request, res: Response) {
     try {
+      const { lastSync } = req.query
+      if(lastSync) {
+        const lastSyncDate = new Date(+lastSync);
+        const foods = await this.foodRepository.getAllSync(lastSyncDate);
+        return res.json(foods);
+      }
       const foods = await this.foodRepository.getAll();
       res.json(foods);
     } catch (error) {

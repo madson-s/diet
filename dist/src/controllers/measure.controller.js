@@ -17,6 +17,12 @@ class MeasureController {
     getAllMeasures(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const { lastSync } = req.query;
+                if (lastSync) {
+                    const lastSyncDate = new Date(+lastSync);
+                    const measures = yield this.measureRepository.getAllSync(lastSyncDate);
+                    return res.json(measures);
+                }
                 const measures = yield this.measureRepository.getAll();
                 res.json(measures);
             }

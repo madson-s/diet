@@ -53,6 +53,23 @@ class PatientController {
             }
         });
     }
+    syncPatient(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { lastSync } = req.query;
+                if (!lastSync)
+                    return res.status(400).send('lastSync query is required');
+                const lastSyncDate = new Date(+lastSync);
+                const updatedPatients = yield this.patientRepository.getAllSync(lastSyncDate);
+                const createdPatients = yield this.patientRepository.createMany(req.body);
+                res.status(201).json({ updatedPatients, createdPatients });
+            }
+            catch (error) {
+                console.error(error);
+                res.status(400).send('Error creating patient');
+            }
+        });
+    }
     updatePatient(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

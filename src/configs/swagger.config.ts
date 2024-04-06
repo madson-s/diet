@@ -7,7 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 const port = process.env.PORT || 10000;
 
 async function loadSwaggerPathsAndSchemas() {
-  const docsDirectory = path.join(__dirname, '..', '..', '..', 'docs');
+  const docsDirectory = path.join(__dirname, '..', '..', 'docs');
   const files = await fs.readdir(docsDirectory);
   
   const swaggerPaths = {};
@@ -43,7 +43,7 @@ export async function setupSwagger(app: Express): Promise<void> {
       description: 'LADOC - DIET API Description',
     },
     servers: [
-      { url: `http://localhost:${port}` },
+      { url: `https://diet-yzoq.onrender.com/api` },
     ],
     paths: swaggerPaths,
     components: {

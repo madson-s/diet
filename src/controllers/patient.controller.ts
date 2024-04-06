@@ -41,6 +41,20 @@ export class PatientController {
     }
   }
 
+  async syncPatient(req: Request, res: Response) {
+    try {
+      const { lastSync } = req.query;
+      if (!lastSync) return res.status(400).send('lastSync query is required');
+      const lastSyncDate = new Date(+lastSync);
+      const updatedPatients = await this.patientRepository.getAllSync(lastSyncDate);
+      const createdPatients = await this.patientRepository.createMany(req.body);
+      res.status(201).json({ updatedPatients, createdPatients });
+    } catch (error) {
+      console.error(error);
+      res.status(400).send('Error creating patient');
+    }
+  }
+
   async updatePatient(req: Request, res: Response) {
     try {
       const updatedPatient = await this.patientRepository.update(+req.params.id, req.body);

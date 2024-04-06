@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma, Measure } from "@prisma/client";
+import { PrismaClient, Prisma, Measure } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -12,22 +12,30 @@ export class MeasureRepository {
     return await prisma.measure.findMany();
   }
 
+  async getAllSync(lastSyncDate: Date): Promise<Measure[]> {
+    return await prisma.measure.findMany({
+      where: {
+        updatedAt: { gte: lastSyncDate }
+      }
+    });
+  }
+
   async getById(id: number): Promise<Measure | null> {
     return await prisma.measure.findUnique({
-      where: { id },
+      where: { id }
     });
   }
 
   async update(id: number, data: Prisma.MeasureUpdateInput): Promise<Measure> {
     return await prisma.measure.update({
       where: { id },
-      data,
+      data
     });
   }
 
   async delete(id: number): Promise<Measure> {
     return await prisma.measure.delete({
-      where: { id },
+      where: { id }
     });
   }
 }

@@ -19,15 +19,32 @@ class AppointmentRepository {
             return appointment;
         });
     }
+    createMany(arrayData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const patients = yield prisma.$transaction(arrayData.map((data) => {
+                return prisma.appointment.create({ data, select: { id: true } });
+            }));
+            return patients;
+        });
+    }
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.appointment.findMany();
         });
     }
+    getAllSync(lastSyncDate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.appointment.findMany({
+                where: {
+                    updatedAt: { gte: lastSyncDate }
+                }
+            });
+        });
+    }
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.appointment.findUnique({
-                where: { id },
+                where: { id }
             });
         });
     }
@@ -35,14 +52,14 @@ class AppointmentRepository {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.appointment.update({
                 where: { id },
-                data,
+                data
             });
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.appointment.delete({
-                where: { id },
+                where: { id }
             });
         });
     }

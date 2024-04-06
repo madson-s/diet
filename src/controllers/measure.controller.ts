@@ -10,6 +10,12 @@ export class MeasureController {
 
   async getAllMeasures(req: Request, res: Response) {
     try {
+      const { lastSync } = req.query
+      if(lastSync) {
+        const lastSyncDate = new Date(+lastSync);
+        const measures = await this.measureRepository.getAllSync(lastSyncDate);
+        return res.json(measures);
+      }
       const measures = await this.measureRepository.getAll();
       res.json(measures);
     } catch (error) {

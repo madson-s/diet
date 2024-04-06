@@ -19,15 +19,32 @@ class PatientRepository {
             return patient;
         });
     }
+    createMany(arrayData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const patients = yield prisma.$transaction(arrayData.map((data) => {
+                return prisma.patient.create({ data, select: { id: true } });
+            }));
+            return patients;
+        });
+    }
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.patient.findMany();
         });
     }
+    getAllSync(lastSyncDate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.patient.findMany({
+                where: {
+                    updatedAt: { gte: lastSyncDate }
+                }
+            });
+        });
+    }
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.patient.findUnique({
-                where: { id },
+                where: { id }
             });
         });
     }
@@ -35,14 +52,14 @@ class PatientRepository {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.patient.update({
                 where: { id },
-                data,
+                data
             });
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.patient.delete({
-                where: { id },
+                where: { id }
             });
         });
     }

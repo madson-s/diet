@@ -24,10 +24,19 @@ class MeasureRepository {
             return yield prisma.measure.findMany();
         });
     }
+    getAllSync(lastSyncDate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.measure.findMany({
+                where: {
+                    updatedAt: { gte: lastSyncDate }
+                }
+            });
+        });
+    }
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.measure.findUnique({
-                where: { id },
+                where: { id }
             });
         });
     }
@@ -35,14 +44,14 @@ class MeasureRepository {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.measure.update({
                 where: { id },
-                data,
+                data
             });
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.measure.delete({
-                where: { id },
+                where: { id }
             });
         });
     }

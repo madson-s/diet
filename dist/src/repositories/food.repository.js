@@ -24,10 +24,19 @@ class FoodRepository {
             return yield prisma.food.findMany();
         });
     }
+    getAllSync(lastSyncDate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.food.findMany({
+                where: {
+                    updatedAt: { gte: lastSyncDate }
+                }
+            });
+        });
+    }
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.food.findUnique({
-                where: { id },
+                where: { id }
             });
         });
     }
@@ -35,14 +44,14 @@ class FoodRepository {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.food.update({
                 where: { id },
-                data,
+                data
             });
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.food.delete({
-                where: { id },
+                where: { id }
             });
         });
     }
