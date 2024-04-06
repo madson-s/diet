@@ -20,7 +20,7 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const port = process.env.PORT || 10000;
 function loadSwaggerPathsAndSchemas() {
     return __awaiter(this, void 0, void 0, function* () {
-        const docsDirectory = path_1.default.join(__dirname, '..', '..', '..', 'docs');
+        const docsDirectory = path_1.default.join(__dirname, '..', '..', 'docs');
         const files = yield fs_1.promises.readdir(docsDirectory);
         const swaggerPaths = {};
         const swaggerSchemas = {};
@@ -54,7 +54,7 @@ function setupSwagger(app) {
                 description: 'LADOC - DIET API Description',
             },
             servers: [
-                { url: `https://diet-yzoq.onrender.com` },
+                { url: `https://diet-yzoq.onrender.com/api` },
             ],
             paths: swaggerPaths,
             components: {
