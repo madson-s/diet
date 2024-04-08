@@ -45,7 +45,7 @@ function setupRouter(app) {
         app.use('/api', router);
         const routesDirectory = path_1.default.join(__dirname, '../routes');
         const files = yield fs_1.promises.readdir(routesDirectory);
-        files.filter(file => file.endsWith('route.ts')).forEach((file) => __awaiter(this, void 0, void 0, function* () {
+        files.filter(file => file.endsWith('route.ts') || file.endsWith('route.js')).forEach((file) => __awaiter(this, void 0, void 0, function* () {
             const filePath = path_1.default.join(routesDirectory, file);
             const route = yield Promise.resolve(`${filePath}`).then(s => __importStar(require(s)));
             route.default(router);

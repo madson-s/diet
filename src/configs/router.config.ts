@@ -10,7 +10,7 @@ export async function setupRouter(app: Express): Promise<void> {
 
   const files = await fs.readdir(routesDirectory);
 
-  files.filter(file => file.endsWith('route.ts')).forEach(async (file) => {
+  files.filter(file => file.endsWith('route.ts') || file.endsWith('route.js')).forEach(async (file) => {
     const filePath = path.join(routesDirectory, file);
     const route = await import(filePath);
     route.default(router);

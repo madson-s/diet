@@ -10,41 +10,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
-const refresh_token_repository_1 = require("../repositories/refresh-token.repository");
-const user_repository_1 = require("../repositories/user.repository");
-const hash_service_1 = require("../services/hash.service");
 const uuidv4_1 = require("uuidv4");
-const jwt_service_1 = require("../services/jwt.service");
-function generateTokens(_a) {
-    return __awaiter(this, arguments, void 0, function* ({ user }) {
-        const refreshToken = (0, uuidv4_1.uuid)();
-        const refreshTokenRepository = new refresh_token_repository_1.RefreshTokenRepository();
-        const tokenService = new jwt_service_1.TokenService();
-        yield refreshTokenRepository.create({
-            createParams: {
-                data: { token: refreshToken, user: { connect: { id: user.id } } },
-            },
-            updateParams: {
-                where: { userId: user.id },
-                data: { deletedAt: new Date() },
-            },
-        });
-        const accessToken = tokenService.generate({ user });
-        return { accessToken, refreshToken };
-    });
-}
 class AuthController {
+    constructor(userRepository, refreshTokenRepository, cryptService, tokenService) {
+        this.userRepository = userRepository;
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.cryptService = cryptService;
+        this.tokenService = tokenService;
+    }
+    generateTokens(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ user }) {
+            const refreshToken = (0, uuidv4_1.uuid)();
+            yield this.refreshTokenRepository.create({
+                createParams: {
+                    data: { token: refreshToken, user: { connect: { id: user.id } } }
+                },
+                updateParams: {
+                    where: { userId: user.id },
+                    data: { deletedAt: new Date() }
+                }
+            });
+            const accessToken = this.tokenService.generate({ user });
+            return { accessToken, refreshToken };
+        });
+    }
     signup(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { email, password, name, type } = request.body;
-                const userRepository = new user_repository_1.UserRepository();
-                const cryptService = new hash_service_1.CryptService();
-                const hashedPassword = yield cryptService.hash(password);
+                const hashedPassword = yield this.cryptService.hash(password);
                 if (!type || (type !== 'ADMIN' && type !== 'NUTRITIONIST')) {
                     return response.status(400).json({ error: 'Invalid or missing user type' });
                 }
-                yield userRepository.add({
+                yield this.userRepository.add({
                     email,
                     name,
                     password: hashedPassword,
@@ -62,19 +60,16 @@ class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { email, password } = request.body;
-                const userRepository = new user_repository_1.UserRepository();
-                const cryptService = new hash_service_1.CryptService();
-                const tokenService = new jwt_service_1.TokenService();
-                let user = yield userRepository.getByEmail(email);
+                let user = yield this.userRepository.getByEmail(email);
                 if (!user) {
                     return response.status(401).json({ error: 'Unauthorized' });
                 }
-                const isPasswordValid = yield cryptService.compare(password, user.password);
+                const isPasswordValid = yield this.cryptService.compare(password, user.password);
                 if (!isPasswordValid) {
                     return response.status(401).json({ error: 'Unauthorized' });
                 }
-                const { accessToken, refreshToken } = yield generateTokens({
-                    user: { id: user.id, email: user.email },
+                const { accessToken, refreshToken } = yield this.generateTokens({
+                    user: { id: user.id, email: user.email }
                 });
                 response.json({ id: user.id, accessToken, refreshToken });
             }
@@ -88,18 +83,16 @@ class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { token } = request.body;
-                const userRepository = new user_repository_1.UserRepository();
-                const refreshTokenRepository = new refresh_token_repository_1.RefreshTokenRepository();
-                const isTokenValid = yield refreshTokenRepository.getByToken(token);
+                const isTokenValid = yield this.refreshTokenRepository.getByToken(token);
                 if (!isTokenValid) {
                     return response.status(401).json({ error: 'Unauthorized' });
                 }
-                const user = yield userRepository.getById(isTokenValid.id);
+                const user = yield this.userRepository.getById(isTokenValid.id);
                 if (!user) {
                     return response.status(401).json({ error: 'Unauthorized' });
                 }
-                const { accessToken, refreshToken } = yield generateTokens({
-                    user: { id: user.id, email: user.email },
+                const { accessToken, refreshToken } = yield this.generateTokens({
+                    user: { id: user.id, email: user.email }
                 });
                 response.json({ id: user.id, accessToken, refreshToken });
             }
