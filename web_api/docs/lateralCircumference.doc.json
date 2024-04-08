@@ -1,0 +1,141 @@
+{
+    "/lateral_circumferences": {
+      "get": {
+        "tags": [
+          "LateralCircumference"
+        ],
+        "summary": "List all lateral circumferences",
+        "responses": {
+          "200": {
+            "description": "A list of lateral circumferences.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LateralCircumference"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "LateralCircumference"
+        ],
+        "summary": "Create a new lateral circumference",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LateralCircumference"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Lateral circumference created."
+          }
+        }
+      }
+    },
+    "/lateral_circumferences/{id}": {
+      "get": {
+        "tags": [
+          "LateralCircumference"
+        ],
+        "summary": "Get a lateral circumference by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detailed lateral circumference information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LateralCircumference"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Lateral circumference not found."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "LateralCircumference"
+        ],
+        "summary": "Update a lateral circumference by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LateralCircumference"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Lateral circumference updated."
+          },
+          "404": {
+            "description": "Lateral circumference not found."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "LateralCircumference"
+        ],
+        "summary": "Delete a lateral circumference by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Lateral circumference deleted successfully."
+          },
+          "404": {
+            "description": "Lateral circumference not found."
+          }
+        }
+      }
+    }
+  }
+  

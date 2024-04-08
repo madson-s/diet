@@ -1,0 +1,64 @@
+{
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "password": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/components/schemas/UserType"
+        },
+        "patients": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Patient"
+          }
+        },
+        "answer": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Answer"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "password",
+        "name",
+        "type"
+      ]
+    },
+    "UserType": {
+      "type": "string",
+      "enum": [
+        "ADMIN",
+        "NUTRITIONIST"
+      ]
+    }
+  }
+  

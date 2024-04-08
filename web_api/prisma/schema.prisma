@@ -1,0 +1,367 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int            @id @default(autoincrement())
+  email     String         @unique
+  password  String
+  name      String
+  type      UserType
+  patients  Patient[]
+  answer    Answer[]
+  refreshs  RefreshToken[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  deletedAt DateTime?
+
+  @@map("user")
+}
+
+enum UserType {
+  ADMIN
+  NUTRITIONIST
+}
+
+model Patient {
+  id             Int           @id @default(autoincrement())
+  name           String
+  gender         PatientGender
+  income         Float?
+  scholarity     String?
+  contact        String?
+  nutritionistId Int
+  appointments   Appointment[]
+  nutritionist   User          @relation(fields: [nutritionistId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+
+  @@map("patient")
+}
+
+enum PatientGender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model Appointment {
+  id             Int             @id @default(autoincrement())
+  date           DateTime
+  patientId      Int
+  anamnesis      Anamnesis?
+  reminder       Reminder?
+  anthropometric Anthropometric?
+  patient        Patient         @relation(fields: [patientId], references: [id])
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  deletedAt      DateTime?
+
+  @@map("appointment")
+}
+
+model Anamnesis {
+  id            Int         @id @default(autoincrement())
+  content       String
+  appointmentId Int         @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  deletedAt     DateTime?
+
+  @@map("anamnesis")
+}
+
+model Reminder {
+  id            Int         @id @default(autoincrement())
+  appointmentId Int         @unique
+  meals         Meal[]
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  deletedAt     DateTime?
+
+  @@map("reminder")
+}
+
+model Meal {
+  id         Int       @id @default(autoincrement())
+  name       String
+  reminderId Int
+  time       String
+  portions   Portion[]
+  reminder   Reminder  @relation(fields: [reminderId], references: [id])
+
+  @@map("meal")
+}
+
+model Portion {
+  id        Int       @id @default(autoincrement())
+  quantity  String
+  mealId    Int
+  foodId    Int
+  mensureId Int
+  measure   Measure   @relation(fields: [mensureId], references: [id])
+  food      Food      @relation(fields: [foodId], references: [id])
+  meal      Meal      @relation(fields: [mealId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("portion")
+}
+
+model Measure {
+  id        Int       @id @default(autoincrement())
+  name      String
+  portion   Float
+  unit      String
+  portions  Portion[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("measure")
+}
+
+model Food {
+  id             Int              @id @default(autoincrement())
+  name           String
+  portion        Float?
+  macronutrients Macronutrients?
+  micronutrients Micronutrients[]
+  unit           String?
+  degree         FoodDegree
+  origin         FoodOrigin
+  portions       Portion[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  deletedAt      DateTime?
+
+  @@map("food")
+}
+
+enum FoodDegree {
+  IN_NATURE
+  MIN_PROCESSED
+  PROCESSED
+  ULTRA_PROCESSED
+  INGREDIENT
+}
+
+enum FoodOrigin {
+  IBGE
+  TACO
+  TBCA
+}
+
+model Macronutrients {
+  id           Int       @id @default(autoincrement())
+  foodId       Int       @unique()
+  protein      Float?
+  lipid        Float?
+  carbohydrate Float?
+  calories     Float?
+  food         Food      @relation(fields: [foodId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  @@map("macronutrients")
+}
+
+model Micronutrients {
+  id        Int       @id @default(autoincrement())
+  name      String
+  unit      String
+  amount    String
+  foodId    Int
+  food      Food      @relation(fields: [foodId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("micronutrients")
+}
+
+model Anthropometric {
+  id            Int                   @id @default(autoincrement())
+  formula       AnthropometricFormula
+  weight        Float?
+  height        Float?
+  bioimpedance  Bioimpedance?
+  skinFold      SkinFold?
+  circumference Circumference?
+  appointmentId Int                   @unique
+  appointment   Appointment           @relation(fields: [appointmentId], references: [id])
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  deletedAt     DateTime?
+
+  @@map("anthropometric")
+}
+
+enum AnthropometricFormula {
+  DEFAULT
+}
+
+model SkinFold {
+  id               Int            @id @default(autoincrement())
+  triceps          Int?
+  biceps           Int?
+  subscapularis    Int?
+  suprailiac       Int?
+  middleAxillary   Int?
+  thoracic         Int?
+  supraspinatus    Int?
+  abdominal        Int?
+  thigh            Int?
+  calf             Int?
+  anthropometricId Int            @unique
+  anthropometric   Anthropometric @relation(fields: [anthropometricId], references: [id])
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  deletedAt        DateTime?
+
+  @@map("skin_fold")
+}
+
+model Circumference {
+  id               Int                    @id @default(autoincrement())
+  neck             Int?
+  chest            Int?
+  waist            Int?
+  hip              Int?
+  abdomen          Int?
+  anthropometricId Int                    @unique
+  laterals         LateralCircumference[]
+  anthropometric   Anthropometric         @relation(fields: [anthropometricId], references: [id])
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  deletedAt        DateTime?
+
+  @@map("circumference")
+}
+
+model LateralCircumference {
+  id               Int               @id @default(autoincrement())
+  side             CircumferenceSide
+  relaxedArm       Int?
+  contractedArm    Int?
+  forearm          Int?
+  calf             Int?
+  thigh            Int?
+  circumferencesId Int?
+  Circumferences   Circumference?    @relation(fields: [circumferencesId], references: [id])
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  deletedAt        DateTime?
+
+  @@map("lateral_circunference")
+}
+
+enum CircumferenceSide {
+  BOTH
+  LEFT
+  RIGHT
+}
+
+model Bioimpedance {
+  id                 Int            @id @default(autoincrement())
+  fatMassPercentage  Float?
+  fatMass            Float?
+  leanMassPercentage Float?
+  leanMass           Float?
+  fatFreeMass        Float?
+  boneWeight         Int?
+  bodyWater          Int?
+  metabolicAge       Int?
+  anthropometricId   Int            @unique
+  anthropometric     Anthropometric @relation(fields: [anthropometricId], references: [id])
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  deletedAt          DateTime?
+
+  @@map("bioimpedance")
+}
+
+model Validation {
+  id   Int            @id @default(autoincrement())
+  type ValidationType
+  quiz Quiz[]
+
+  @@map("validation")
+}
+
+enum ValidationType {
+  CONTENT
+  UI
+  UX
+}
+
+model Quiz {
+  id           Int        @id @default(autoincrement())
+  title        String
+  active       Boolean
+  validationId Int
+  questions    Question[]
+  Answers      Answer[]
+  validation   Validation @relation(fields: [validationId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  deletedAt    DateTime?
+
+  @@map("quiz")
+}
+
+model Question {
+  id         Int                @id @default(autoincrement())
+  statement  String
+  answerType QuestionAnswerType
+  options    Json?
+  quizId     Int
+  quiz       Quiz               @relation(fields: [quizId], references: [id])
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+  deletedAt  DateTime?
+
+  @@map("question")
+}
+
+enum QuestionAnswerType {
+  TEXT
+  RADIO
+  CHECKBOX
+  RATING
+}
+
+model Answer {
+  id        Int       @id @default(autoincrement())
+  payload   Json?
+  quizId    Int
+  userId    Int
+  quiz      Quiz      @relation(fields: [quizId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("answer")
+}
+
+model RefreshToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+
+  @@map("refresh_token")
+}

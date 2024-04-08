@@ -1,0 +1,54 @@
+{
+  "Appointment": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "date": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "patientId": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "anamnesis": {
+        "$ref": "#/components/schemas/Anamnesis",
+        "nullable": true
+      },
+      "reminder": {
+        "$ref": "#/components/schemas/Reminder",
+        "nullable": true
+      },
+      "anthropometric": {
+        "$ref": "#/components/schemas/Anthropometric",
+        "nullable": true
+      },
+      "patient": {
+        "$ref": "#/components/schemas/Patient"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "updatedAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "deletedAt": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
+      }
+    },
+    "required": [
+      "id",
+      "date",
+      "patientId",
+      "createdAt",
+      "updatedAt"
+    ]
+  }
+}

@@ -1,0 +1,141 @@
+{
+    "/bioimpedances": {
+      "get": {
+        "tags": [
+          "Bioimpedance"
+        ],
+        "summary": "List all bioimpedances",
+        "responses": {
+          "200": {
+            "description": "A list of bioimpedances.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Bioimpedance"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Bioimpedance"
+        ],
+        "summary": "Create a new bioimpedance",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Bioimpedance"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Bioimpedance created."
+          }
+        }
+      }
+    },
+    "/bioimpediances/{id}": {
+      "get": {
+        "tags": [
+          "Bioimpedance"
+        ],
+        "summary": "Get a bioimpedance by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detailed bioimpedance information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bioimpedance"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bioimpedance not found."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Bioimpedance"
+        ],
+        "summary": "Update a bioimpedance by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Bioimpedance"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bioimpedance updated."
+          },
+          "404": {
+            "description": "Bioimpedance not found."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Bioimpedance"
+        ],
+        "summary": "Delete a bioimpedance by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Bioimpedance deleted successfully."
+          },
+          "404": {
+            "description": "Bioimpedance not found."
+          }
+        }
+      }
+    }
+  }
+  
