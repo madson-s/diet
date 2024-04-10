@@ -83,7 +83,7 @@ export class AuthController {
         user: { ...user, email: user.email }
       });
 
-      response.json({ id: user.id, accessToken, refreshToken });
+      response.json({ id: user.id, name: user.name, email: user.email, accessToken, refreshToken });
     } catch (error) {
       console.error(error);
       response.status(500).json({ error: 'An error occurred while signing in the user' });
@@ -108,7 +108,7 @@ export class AuthController {
         user: { id: user.id, email: user.email }
       });
 
-      response.json({ ...user, accessToken, refreshToken });
+      response.json({ id: user.id, name: user.name, email: user.email, accessToken, refreshToken });
     } catch (error) {
       console.error(error);
       response.status(500).json({ error: 'An error occurred while refreshing the token' });
