@@ -80,7 +80,7 @@ export class AuthController {
       }
 
       const { accessToken, refreshToken } = await this.generateTokens({
-        user: { id: user.id, email: user.email }
+        user: { ...user, email: user.email }
       });
 
       response.json({ id: user.id, accessToken, refreshToken });
@@ -99,7 +99,7 @@ export class AuthController {
         return response.status(401).json({ error: 'Unauthorized' });
       }
 
-      const user = await this.userRepository.getById(isTokenValid.id);
+      const user = await this.userRepository.getById(isTokenValid.userId);
       if (!user) {
         return response.status(401).json({ error: 'Unauthorized' });
       }
@@ -108,7 +108,7 @@ export class AuthController {
         user: { id: user.id, email: user.email }
       });
 
-      response.json({ id: user.id, accessToken, refreshToken });
+      response.json({ ...user, accessToken, refreshToken });
     } catch (error) {
       console.error(error);
       response.status(500).json({ error: 'An error occurred while refreshing the token' });

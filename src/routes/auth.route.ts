@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { makeBioimpedanceController } from '../factories/controllers/bioimpedance_controller.factory'; 
 import { makeAuthtroller } from '../factories/controllers/auth_controller.factory';
 
 const authController = makeAuthtroller();
