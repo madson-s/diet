@@ -69,9 +69,9 @@ class AuthController {
                     return response.status(401).json({ error: 'Unauthorized' });
                 }
                 const { accessToken, refreshToken } = yield this.generateTokens({
-                    user: { id: user.id, email: user.email }
+                    user: Object.assign(Object.assign({}, user), { email: user.email })
                 });
-                response.json({ id: user.id, accessToken, refreshToken });
+                response.json({ id: user.id, name: user.name, email: user.email, accessToken, refreshToken });
             }
             catch (error) {
                 console.error(error);
@@ -87,14 +87,14 @@ class AuthController {
                 if (!isTokenValid) {
                     return response.status(401).json({ error: 'Unauthorized' });
                 }
-                const user = yield this.userRepository.getById(isTokenValid.id);
+                const user = yield this.userRepository.getById(isTokenValid.userId);
                 if (!user) {
                     return response.status(401).json({ error: 'Unauthorized' });
                 }
                 const { accessToken, refreshToken } = yield this.generateTokens({
                     user: { id: user.id, email: user.email }
                 });
-                response.json({ id: user.id, accessToken, refreshToken });
+                response.json({ id: user.id, name: user.name, email: user.email, accessToken, refreshToken });
             }
             catch (error) {
                 console.error(error);
