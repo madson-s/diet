@@ -35,6 +35,7 @@ model Patient {
   income         Float?
   scholarity     String?
   contact        String?
+  birthDate      DateTime
   nutritionistId Int
   appointments   Appointment[]
   nutritionist   User          @relation(fields: [nutritionistId], references: [id])
@@ -282,6 +283,7 @@ model Bioimpedance {
   boneWeight         Int?
   bodyWater          Int?
   metabolicAge       Int?
+  visceralFat        Int?
   anthropometricId   Int            @unique
   anthropometric     Anthropometric @relation(fields: [anthropometricId], references: [id])
   createdAt          DateTime       @default(now())
