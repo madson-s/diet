@@ -22,6 +22,7 @@ class PatientRepository {
     createMany(arrayData) {
         return __awaiter(this, void 0, void 0, function* () {
             const patients = yield prisma.$transaction(arrayData.map((data) => {
+                data.birthDate = new Date(data.birthDate);
                 return prisma.patient.create({ data, select: { id: true } });
             }));
             return patients;

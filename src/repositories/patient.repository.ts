@@ -11,6 +11,7 @@ export class PatientRepository {
   async createMany(arrayData: Prisma.PatientCreateInput[]): Promise<{ id: number }[]> {
     const patients = await prisma.$transaction(
       arrayData.map((data) => {
+        data.birthDate = new Date(data.birthDate);
         return prisma.patient.create({ data, select: { id: true } });
       })
     );
