@@ -259,7 +259,7 @@ model LateralCircumference {
   calf             Int?
   thigh            Int?
   circumferencesId Int?
-  Circumferences   Circumference?    @relation(fields: [circumferencesId], references: [id])
+  circumferences   Circumference?    @relation(fields: [circumferencesId], references: [id])
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   deletedAt        DateTime?

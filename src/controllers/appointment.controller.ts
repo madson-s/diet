@@ -4,6 +4,7 @@ import { AppointmentRepository } from '../repositories/appointment.repository';
 function PrismaParser(appointment: any): any {
   const {
     anamnesis,
+    date,
     reminder: { meals },
     anthropometric: { bioimpedance, skinFold, circumference, ...anthropometricRest },
     anthropometric,
@@ -11,6 +12,7 @@ function PrismaParser(appointment: any): any {
   } = appointment;
   return {
     ...appointmentRest,
+    date: (new Date(date)).toISOString(),
     anamnesis: {
       create: anamnesis,
     },
@@ -99,7 +101,7 @@ export class AppointmentController {
         arrayData.push(appointment)
       }
       const updatedAppointments = await this.appointmentRepository.getAllSync(lastSyncDate);
-      const createdAppointments = await this.appointmentRepository.createMany(req.body);
+      const createdAppointments = await this.appointmentRepository.createMany(arrayData);
       res.status(201).json({ updatedAppointments, createdAppointments });
     } catch (error) {
       console.error(error);
