@@ -22,8 +22,8 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppointmentController = void 0;
 function PrismaParser(appointment) {
-    const { anamnesis, reminder: { meals } } = appointment, _a = appointment.anthropometric, { bioimpedance, skinFold, circumference } = _a, anthropometricRest = __rest(_a, ["bioimpedance", "skinFold", "circumference"]), { anthropometric } = appointment, appointmentRest = __rest(appointment, ["anamnesis", "reminder", "anthropometric", "anthropometric"]);
-    return Object.assign(Object.assign({}, appointmentRest), { anamnesis: {
+    const { anamnesis, date, reminder: { meals } } = appointment, _a = appointment.anthropometric, { bioimpedance, skinFold, circumference } = _a, anthropometricRest = __rest(_a, ["bioimpedance", "skinFold", "circumference"]), { anthropometric } = appointment, appointmentRest = __rest(appointment, ["anamnesis", "date", "reminder", "anthropometric", "anthropometric"]);
+    return Object.assign(Object.assign({}, appointmentRest), { date: (new Date(date)).toISOString(), anamnesis: {
             create: anamnesis,
         }, reminder: {
             create: {
@@ -101,7 +101,7 @@ class AppointmentController {
                     arrayData.push(appointment);
                 }
                 const updatedAppointments = yield this.appointmentRepository.getAllSync(lastSyncDate);
-                const createdAppointments = yield this.appointmentRepository.createMany(req.body);
+                const createdAppointments = yield this.appointmentRepository.createMany(arrayData);
                 res.status(201).json({ updatedAppointments, createdAppointments });
             }
             catch (error) {
