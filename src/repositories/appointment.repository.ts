@@ -1,3 +1,4 @@
+
 import { PrismaClient, Prisma, Appointment } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -25,6 +26,21 @@ export class AppointmentRepository {
     return await prisma.appointment.findMany({
       where: {
         updatedAt: { gte: lastSyncDate }
+      },
+      include:{
+        anamnesis: true,
+        reminder: true, 
+        anthropometric: {
+          include:{
+            circumference: {
+              include: {
+                laterals: true,
+              }
+            },
+            skinFold: true,
+            bioimpedance: true,
+          }
+        }
       }
     });
   }

@@ -37,6 +37,21 @@ class AppointmentRepository {
             return yield prisma.appointment.findMany({
                 where: {
                     updatedAt: { gte: lastSyncDate }
+                },
+                include: {
+                    anamnesis: true,
+                    reminder: true,
+                    anthropometric: {
+                        include: {
+                            circumference: {
+                                include: {
+                                    laterals: true,
+                                }
+                            },
+                            skinFold: true,
+                            bioimpedance: true,
+                        }
+                    }
                 }
             });
         });
