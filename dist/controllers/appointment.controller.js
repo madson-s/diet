@@ -22,9 +22,11 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppointmentController = void 0;
 function PrismaParser(appointment) {
-    const { anamnesis, date, reminder: { meals } } = appointment, _a = appointment.anthropometric, { bioimpedance, skinFold, circumference } = _a, anthropometricRest = __rest(_a, ["bioimpedance", "skinFold", "circumference"]), { anthropometric } = appointment, appointmentRest = __rest(appointment, ["anamnesis", "date", "reminder", "anthropometric", "anthropometric"]);
+    const { anamnesis, lifestyle, date, reminder: { meals } } = appointment, _a = appointment.anthropometric, { bioimpedance, skinFold, circumference } = _a, anthropometricRest = __rest(_a, ["bioimpedance", "skinFold", "circumference"]), { anthropometric } = appointment, appointmentRest = __rest(appointment, ["anamnesis", "lifestyle", "date", "reminder", "anthropometric", "anthropometric"]);
     return Object.assign(Object.assign({}, appointmentRest), { date: (new Date(date)).toISOString(), anamnesis: {
             create: anamnesis,
+        }, lifestyle: {
+            create: lifestyle,
         }, reminder: {
             create: {
                 meals: {

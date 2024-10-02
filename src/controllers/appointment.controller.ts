@@ -4,6 +4,7 @@ import { AppointmentRepository } from '../repositories/appointment.repository';
 function PrismaParser(appointment: any): any {
   const {
     anamnesis,
+    lifestyle,
     date,
     reminder: { meals },
     anthropometric: { bioimpedance, skinFold, circumference, ...anthropometricRest },
@@ -15,6 +16,9 @@ function PrismaParser(appointment: any): any {
     date: (new Date(date)).toISOString(),
     anamnesis: {
       create: anamnesis,
+    },
+    lifestyle: {
+      create: lifestyle,
     },
     reminder: {
       create: {

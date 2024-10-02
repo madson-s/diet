@@ -59,6 +59,7 @@ model Appointment {
   anamnesis      Anamnesis?
   reminder       Reminder?
   anthropometric Anthropometric?
+  lifestyle      Lifestyle?
   patient        Patient         @relation(fields: [patientId], references: [id])
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
@@ -67,14 +68,45 @@ model Appointment {
   @@map("appointment")
 }
 
+model Lifestyle {
+  id                 Int         @id @default(autoincrement())
+  smoking            Boolean
+  smokingHowLong     Int?
+  alcohol            Boolean
+  alcoholType        String?
+  alcoholFrequency   String?
+  exercises          Boolean
+  exercisesType      String?
+  exercisesDuration  Int?
+  exercisesFrequency String?
+  exercisesHowLong   String?
+  appointmentId      Int         @unique
+  appointment        Appointment @relation(fields: [appointmentId], references: [id])
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  deletedAt          DateTime?
+
+  @@map("lifestyle")
+}
+
 model Anamnesis {
-  id            Int         @id @default(autoincrement())
-  content       String
-  appointmentId Int         @unique
-  appointment   Appointment @relation(fields: [appointmentId], references: [id])
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  deletedAt     DateTime?
+  id                        Int         @id @default(autoincrement())
+  content                   String
+  diseases                  Boolean
+  diseasesDetails           String?
+  diabetes                  Boolean
+  diabetesDiagnosis         DateTime?
+  insulin                   Boolean
+  insulinDetails            String?
+  glycemiaMedications       Boolean
+  glycemiaMedicationDetails String?
+  otherMedications          Boolean
+  otherMedicationDetails    String?
+  appointmentId             Int         @unique
+  appointment               Appointment @relation(fields: [appointmentId], references: [id])
+  createdAt                 DateTime    @default(now())
+  updatedAt                 DateTime    @updatedAt
+  deletedAt                 DateTime?
 
   @@map("anamnesis")
 }
